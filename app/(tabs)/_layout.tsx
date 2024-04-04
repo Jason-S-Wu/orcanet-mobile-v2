@@ -1,13 +1,13 @@
 import React from 'react';
 import {Tabs} from 'expo-router';
-import Colors from '@/constants/Colors';
 import {FontAwesome, FontAwesome5} from '@expo/vector-icons';
+import theme from '@/constants/Colors';
 
 const Layout = () => {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors.primary,
+        tabBarActiveTintColor: theme.colors.primary,
         tabBarLabelStyle: {
           fontFamily: 'mon-sb',
         },

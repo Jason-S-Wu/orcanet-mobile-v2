@@ -2,6 +2,8 @@ import {useFonts} from 'expo-font';
 import {Stack} from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import {useEffect} from 'react';
+import {PaperProvider} from 'react-native-paper';
+import theme from '@/constants/Colors';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -43,16 +45,26 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   return (
-    <Stack>
-      <Stack.Screen name="(tabs)" options={{headerShown: false}} />
-      <Stack.Screen
-        name="(modals)/settings"
-        options={{
-          title: 'Settings',
-          presentation: 'fullScreenModal',
-          animation: 'slide_from_right',
-        }}
-      />
-    </Stack>
+    <PaperProvider theme={theme}>
+      <Stack>
+        <Stack.Screen name="(tabs)" options={{headerShown: false}} />
+        <Stack.Screen
+          name="(modals)/settings"
+          options={{
+            title: 'Settings',
+            presentation: 'fullScreenModal',
+            animation: 'slide_from_right',
+          }}
+        />
+        <Stack.Screen
+          name="viewer/[fileName]"
+          options={{
+            title: 'Viewer',
+            presentation: 'fullScreenModal',
+            animation: 'simple_push',
+          }}
+        />
+      </Stack>
+    </PaperProvider>
   );
 }
