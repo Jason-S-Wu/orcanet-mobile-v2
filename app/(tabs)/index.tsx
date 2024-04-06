@@ -1,21 +1,14 @@
-import {View, ActivityIndicator, Alert} from 'react-native';
+import {View, ActivityIndicator, Alert, StyleSheet} from 'react-native';
 import React, {useState} from 'react';
 import {router} from 'expo-router';
 import {Button, Card, Text} from 'react-native-paper';
-
-//mock server response for testing purpose can be removed once we connec to peer
-const fetchFromServer = (fileName: string) => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve({success: true});
-    }, 6000); // Adjust the timeout as needed
-  });
-};
+import {marketData} from '@/constants/mock-data/MockMarketData';
+import {MarketFile} from '@/constants/mock-data/types';
 
 const Index = () => {
   const [loading, setLoading] = useState(false);
 
-  const files = ['a']; //for mock data currently will fetch files from stoarge
+  const files: MarketFile[] = marketData; //for mock data currently
 
   const handleViewPress = async (fileName: string) => {
     setLoading(true);
@@ -44,89 +37,76 @@ const Index = () => {
     });
   };
 
-  if (loading) {
-    return (
-      <View
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          zIndex: 1,
-        }}
-      >
-        <ActivityIndicator color="#ffffff" size="large" />
-      </View>
-    );
-  }
-
-  if (files.length === 0) {
-    return (
-      <Card style={{marginTop: 0, margin: 20, padding: 5}}>
-        <Card.Content>
-          <Text variant="bodyLarge">Please Download Files From Market</Text>
-        </Card.Content>
-        <Card.Actions>
-          <Button onPress={() => router.push('/(tabs)/market')}>Market</Button>
-        </Card.Actions>
-      </Card>
-    );
-  }
-
   return (
-    <View>
-      <Card style={{margin: 20, padding: 5}}>
-        <Card.Title
-          title="File1.mp4"
-          subtitle="File Size (Already Downloaded)"
-        />
-        <Card.Content>
-          <Text style={{fontSize: 10}}>
-            b2a942392826b0faa61a8fce1a0a9c8ed1376883e23b82b396b25d22be86592a
-          </Text>
-        </Card.Content>
-        <Card.Actions>
-          <Button onPress={() => handleViewPress('file1.mp4')}>
-            <Text>View</Text>
-          </Button>
-        </Card.Actions>
-      </Card>
-      <Card style={{marginTop: 0, margin: 20, padding: 5}}>
-        <Card.Title
-          title="File2.mp4"
-          subtitle="File Size (Already Downloaded)"
-        />
-        <Card.Content>
-          <Text style={{fontSize: 10}}>
-            1d79a341a4e4cd73889b848807caf77bf5336f3732517d7a4c57addf98f79f92
-          </Text>
-        </Card.Content>
-        <Card.Actions>
-          <Button onPress={() => handleViewPress('file2.mp4')}>
-            <Text>View</Text>
-          </Button>
-        </Card.Actions>
-      </Card>
-      <Card style={{marginTop: 0, margin: 20, padding: 5}}>
-        <Card.Title
-          title="File3.mp4"
-          subtitle="File Size (Already Downloaded)"
-        />
-        <Card.Content>
-          <Text style={{fontSize: 10}}>
-            29445cfc2eef20bd4374bbac1cfe7dda050428117304f9e409e7e0b5440d1d59
-          </Text>
-        </Card.Content>
-        <Card.Actions>
-          <Button onPress={() => handleViewPress('file3.mp4')}>View</Button>
-        </Card.Actions>
-      </Card>
+    <View style={styles.container}>
+      {loading && (
+        <View style={styles.loadingOverlay}>
+          <ActivityIndicator color="#ffffff" size="large" />
+        </View>
+      )}
+      {files.length === 0 ? (
+        <Card style={styles.card}>
+          <Card.Content>
+            <Text style={styles.text}>Please Download Files From Market</Text>
+          </Card.Content>
+          <Card.Actions>
+            <Button onPress={() => router.push('/(tabs)/market')}>
+              Go To Market
+            </Button>
+          </Card.Actions>
+        </Card>
+      ) : (
+        files.map((file, index) => (
+          <Card key={index} style={styles.card}>
+            <Card.Title
+              title={`${file.name}`}
+              subtitle={`Size: ${file.size} MB`}
+            />
+            <Card.Content>
+              <Text style={styles.text}>{`Hash: ${file.fileHash}`}</Text>
+            </Card.Content>
+            <Card.Actions>
+              <Button onPress={() => handleViewPress(file.name)}>
+                <Text>View</Text>
+              </Button>
+            </Card.Actions>
+          </Card>
+        ))
+      )}
     </View>
   );
 };
+
+//mock server response for testing purpose can be removed once we connec to peer
+const fetchFromServer = (fileName: string) => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve({success: true});
+    }, 2000); // Adjust the timeout as needed
+  });
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f0f0f0',
+    padding: 10,
+  },
+  loadingOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 1,
+  },
+  card: {
+    marginTop: 0,
+    margin: 20,
+    padding: 5,
+  },
+  text: {
+    fontSize: 14,
+  },
+});
 
 export default Index;
