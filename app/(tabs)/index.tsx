@@ -1,9 +1,82 @@
-import {View} from 'react-native';
-import React from 'react';
+import {View, ActivityIndicator, Alert} from 'react-native';
+import React, {useState} from 'react';
 import {router} from 'expo-router';
 import {Button, Card, Text} from 'react-native-paper';
 
+//mock server response for testing purpose can be removed once we connec to peer
+const fetchFromServer = (fileName: string) => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve({success: true});
+    }, 6000); // Adjust the timeout as needed
+  });
+};
+
 const Index = () => {
+  const [loading, setLoading] = useState(false);
+
+  const files = ['a']; //for mock data currently will fetch files from stoarge
+
+  const handleViewPress = async (fileName: string) => {
+    setLoading(true);
+    try {
+      await Promise.race([fetchFromServer(fileName), timeoutPromise()]);
+      router.push(`/viewer/${fileName}`);
+    } catch (error) {
+      if (error === 'Timeout') {
+        Alert.alert(
+          'Error',
+          'Failed to load file due to timeout. Please try again later.'
+        );
+      } else {
+        Alert.alert('Error', 'Failed to load file. Please try again later.');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const timeoutPromise = () => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        reject('Timeout');
+      }, 5000); // change timeout limit here
+    });
+  };
+
+  if (loading) {
+    return (
+      <View
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          zIndex: 1,
+        }}
+      >
+        <ActivityIndicator color="#ffffff" size="large" />
+      </View>
+    );
+  }
+
+  if (files.length === 0) {
+    return (
+      <Card style={{marginTop: 0, margin: 20, padding: 5}}>
+        <Card.Content>
+          <Text variant="bodyLarge">Please Download Files From Market</Text>
+        </Card.Content>
+        <Card.Actions>
+          <Button onPress={() => router.push('/(tabs)/market')}>Market</Button>
+        </Card.Actions>
+      </Card>
+    );
+  }
+
   return (
     <View>
       <Card style={{margin: 20, padding: 5}}>
@@ -17,7 +90,9 @@ const Index = () => {
           </Text>
         </Card.Content>
         <Card.Actions>
-          <Button onPress={() => router.push('/viewer/file1.mp4')}>View</Button>
+          <Button onPress={() => handleViewPress('file1.mp4')}>
+            <Text>View</Text>
+          </Button>
         </Card.Actions>
       </Card>
       <Card style={{marginTop: 0, margin: 20, padding: 5}}>
@@ -31,7 +106,9 @@ const Index = () => {
           </Text>
         </Card.Content>
         <Card.Actions>
-          <Button onPress={() => router.push('/viewer/file2.mp4')}>View</Button>
+          <Button onPress={() => handleViewPress('file2.mp4')}>
+            <Text>View</Text>
+          </Button>
         </Card.Actions>
       </Card>
       <Card style={{marginTop: 0, margin: 20, padding: 5}}>
@@ -45,16 +122,7 @@ const Index = () => {
           </Text>
         </Card.Content>
         <Card.Actions>
-          <Button onPress={() => router.push('/viewer/file3.mp4')}>View</Button>
-        </Card.Actions>
-      </Card>
-      {/* TODO:  Case Where there are no Files in Files Tab */}
-      <Card style={{marginTop: 0, margin: 20, padding: 5}}>
-        <Card.Content>
-          <Text variant="bodyLarge">Please Download Files From Market</Text>
-        </Card.Content>
-        <Card.Actions>
-          <Button onPress={() => router.push('/(tabs)/market')}>Market</Button>
+          <Button onPress={() => handleViewPress('file3.mp4')}>View</Button>
         </Card.Actions>
       </Card>
     </View>
