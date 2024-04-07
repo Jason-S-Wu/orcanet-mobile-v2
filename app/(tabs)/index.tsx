@@ -1,14 +1,25 @@
-import {View, ActivityIndicator, Alert, StyleSheet} from 'react-native';
+import {
+  View,
+  ActivityIndicator,
+  Alert,
+  StyleSheet,
+  ScrollView,
+} from 'react-native';
 import React, {useState} from 'react';
 import {router} from 'expo-router';
-import {Button, Card, Text} from 'react-native-paper';
+import {Button, Card, Text, Searchbar} from 'react-native-paper';
 import {marketData} from '@/constants/mock-data/MockMarketData';
 import {MarketFile} from '@/constants/mock-data/types';
 
 const Index = () => {
   const [loading, setLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const files: MarketFile[] = marketData; //for mock data currently
+  const mockFiles: MarketFile[] = marketData; //for mock data currently
+
+  const files = mockFiles.filter(file =>
+    file.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const handleViewPress = async (fileName: string) => {
     setLoading(true);
@@ -37,26 +48,37 @@ const Index = () => {
     });
   };
 
+  if (files.length === 0) {
+    return (
+      <Card style={styles.card}>
+        <Card.Content>
+          <Text style={styles.text}>Please Download Files From Market</Text>
+        </Card.Content>
+        <Card.Actions>
+          <Button onPress={() => router.push('/(tabs)/market')}>
+            Go To Market
+          </Button>
+        </Card.Actions>
+      </Card>
+    );
+  }
+
   return (
-    <View style={styles.container}>
-      {loading && (
-        <View style={styles.loadingOverlay}>
-          <ActivityIndicator color="#ffffff" size="large" />
-        </View>
-      )}
-      {files.length === 0 ? (
-        <Card style={styles.card}>
-          <Card.Content>
-            <Text style={styles.text}>Please Download Files From Market</Text>
-          </Card.Content>
-          <Card.Actions>
-            <Button onPress={() => router.push('/(tabs)/market')}>
-              Go To Market
-            </Button>
-          </Card.Actions>
-        </Card>
-      ) : (
-        files.map((file, index) => (
+    <ScrollView>
+      <View style={styles.container}>
+        {loading && (
+          <View style={styles.loadingOverlay}>
+            <ActivityIndicator color="#ffffff" size="large" />
+          </View>
+        )}
+        <Searchbar
+          style={styles.searchBar}
+          placeholder="Search file name..."
+          value={searchQuery}
+          onChangeText={text => setSearchQuery(text)}
+        />
+
+        {files.map((file, index) => (
           <Card key={index} style={styles.card}>
             <Card.Title
               title={`${file.name}`}
@@ -71,9 +93,9 @@ const Index = () => {
               </Button>
             </Card.Actions>
           </Card>
-        ))
-      )}
-    </View>
+        ))}
+      </View>
+    </ScrollView>
   );
 };
 
@@ -103,6 +125,9 @@ const styles = StyleSheet.create({
     marginTop: 0,
     margin: 20,
     padding: 5,
+  },
+  searchBar: {
+    margin: 5,
   },
   text: {
     fontSize: 14,
