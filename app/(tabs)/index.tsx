@@ -9,7 +9,8 @@ import React, {useState} from 'react';
 import {router} from 'expo-router';
 import {Button, Card, Text, Searchbar} from 'react-native-paper';
 import {marketData} from '@/constants/mock-data/MockMarketData';
-import {MarketFile} from '@/constants/mock-data/types';
+import {MarketFile} from '@/constants/types';
+import { fetchFromServer } from '@/constants/mock-data/mockServerRequest';
 
 const Index = () => {
   const [loading, setLoading] = useState(false);
@@ -97,15 +98,6 @@ const Index = () => {
       </View>
     </ScrollView>
   );
-};
-
-//mock server response for testing purpose can be removed once we connec to peer
-const fetchFromServer = (fileName: string) => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve({success: true});
-    }, 2000); // Adjust the timeout as needed
-  });
 };
 
 const styles = StyleSheet.create({
