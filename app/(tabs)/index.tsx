@@ -129,6 +129,7 @@ const Index = () => {
             [{nativeEvent: {contentOffset: {y: scrollY}}}],
             {useNativeDriver: true}
           )}
+          contentContainerStyle={{paddingBottom: 100}}
         />
       </SafeAreaView>
     </View>
@@ -155,6 +156,7 @@ const styles = StyleSheet.create({
   },
   searchBar: {
     margin: 5,
+    marginBottom: 10,
   },
   text: {
     fontSize: 14,
@@ -162,7 +164,7 @@ const styles = StyleSheet.create({
 
   item: {
     flexDirection: 'row',
-    marginBottom: 20,
+    marginBottom: 5,
     borderRadius: 10,
     backgroundColor: '#fff',
     shadowColor: '#000',
