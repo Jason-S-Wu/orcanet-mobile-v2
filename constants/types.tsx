@@ -11,3 +11,11 @@ export type MarketFile = {
   name: string;
   size: number; //in MB
 };
+
+export type Transaction = {
+  id: string;
+  note: string;
+  status: string;
+  date: string;
+  amount: number;
+};
