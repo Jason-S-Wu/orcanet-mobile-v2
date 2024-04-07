@@ -48,7 +48,7 @@ const Index = () => {
     });
   };
 
-  if (files.length === 0) {
+  if (mockFiles.length === 0) {
     return (
       <Card style={styles.card}>
         <Card.Content>
