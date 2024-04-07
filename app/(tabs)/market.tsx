@@ -1,13 +1,63 @@
-import {View} from 'react-native';
-import React from 'react';
-import {Card, Searchbar, Text, Button} from 'react-native-paper';
+import React, {useState} from 'react';
+import {View, ActivityIndicator, Alert} from 'react-native';
+import {Card, Searchbar, Text, Button, Snackbar} from 'react-native-paper';
 import {router} from 'expo-router';
 
-const Market = () => {
-  const [hash, setHash] = React.useState('');
+import {getDataFromMarketRequest} from '@/constants/mock-data/mockServerRequest';
+import {MarketFile, MarketInfo} from '@/constants/types';
 
-  const handleHash = (text: string) => {
-    setHash(text);
+const Market = () => {
+  const [hash, setHash] = useState<string>('');
+  const [loading, setLoading] = useState<Boolean>(false);
+  const [fileDetails, setFileDetails] = useState<MarketInfo>();
+  const [showDetails, setShowDetails] = useState<boolean>(false);
+
+  const handleHash = (hash: string) => {
+    setHash(hash);
+  };
+
+  const searchFile = async () => {
+    setLoading(true);
+    try {
+      const response: any = await Promise.race([
+        getDataFromMarketRequest(hash), // Your API request
+        timeoutPromise(),
+      ]);
+
+      setLoading(false);
+
+      if (response !== null && response !== undefined) {
+        setFileDetails(response);
+      } else {
+        // This condition will be triggered if response is null or undefined
+        Alert.alert('Error', 'Bad Response.');
+      }
+    } catch (error) {
+      if (error === 'Timeout') {
+        Alert.alert('Error', 'Timeout have occured');
+      } else {
+        Alert.alert('Error', `${error}`);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const timeoutPromise = () => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        reject('Timeout');
+      }, 5000); // change timeout limit here
+    });
+  };
+
+  const toggleDetails = () => {
+    console.log(showDetails);
+    setShowDetails(!showDetails);
+  };
+
+  const buyFile = (fileInfo: MarketInfo) => {
+    Alert.alert('Buy File', 'Implement the buy file functionality here.');
   };
 
   return (
@@ -17,25 +67,39 @@ const Market = () => {
         value={hash}
         onChangeText={handleHash}
         style={{margin: 20}}
+        onSubmitEditing={searchFile}
       />
-      <Card style={{marginTop: 0, margin: 20, padding: 5}}>
-        <Card.Title title="File1.mp4" subtitle="Cost Per MB: 1.0" />
-        <Card.Content>
-          <Text style={{fontSize: 10, marginBottom: 10}}>
-            29445cfc2eef20bd4374bbac1cfe7dda050428117304f9e409e7e0b5440d1d59
-          </Text>
-          {/* TODO: Below if details are clicked */}
-          <View>
-            <Text>Owner: 0x1234567890abcdef</Text>
-            <Text>IP: 127.0.0.1 </Text>
-            <Text>Size: 1.2MB </Text>
-          </View>
-        </Card.Content>
-        <Card.Actions>
-          <Button>View Details</Button>
-          {/* TODO: If Else Once View Detailed Clicked Then Download / Buy Can Show Up [We can give option to stream or download or download while streaming]*/}
-        </Card.Actions>
-      </Card>
+      {loading ? (
+        <ActivityIndicator
+          size="large"
+          color="#0000ff"
+          style={{marginTop: 20}}
+        />
+      ) : fileDetails ? (
+        <Card style={{marginTop: 0, margin: 20, padding: 5}}>
+          <Card.Title
+            title={`File Name: ${fileDetails.name}`}
+            subtitle={`Cost: ${fileDetails.price * fileDetails.size}`}
+          />
+          {showDetails ? (
+            <Card.Content>
+              <View>
+                <Text>Owner ID: {fileDetails.id}</Text>
+                <Text>IP: {fileDetails.ip}</Text>
+                <Text>PORT: {fileDetails.port}</Text>
+                <Text>Cost Per MB: {fileDetails.price}</Text>
+                <Text>Size: {fileDetails.size} MB</Text>
+                <Button onPress={() => buyFile(fileDetails)}>Buy File</Button>
+              </View>
+            </Card.Content>
+          ) : null}
+          <Card.Actions>
+            <Button onPress={() => toggleDetails()}>
+              {showDetails ? 'Hide Details' : 'View Details'}
+            </Button>
+          </Card.Actions>
+        </Card>
+      ) : null}
     </View>
   );
 };

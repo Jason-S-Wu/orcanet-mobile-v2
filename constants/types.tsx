@@ -19,3 +19,5 @@ export type Transaction = {
   date: string;
   amount: number;
 };
+
+export type MarketInfo = User & MarketFile; // the name in this type is for MarketFile's name

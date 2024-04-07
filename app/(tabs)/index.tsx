@@ -9,7 +9,7 @@ import {
 import React, {useRef, useState} from 'react';
 import {router} from 'expo-router';
 import {Button, Card, Text, Searchbar} from 'react-native-paper';
-import {marketData} from '@/constants/mock-data/MockMarketData';
+import {mockFileData} from '@/constants/mock-data/mockData';
 import {MarketFile} from '@/constants/types';
 import {fetchFromServer} from '@/constants/mock-data/mockServerRequest';
 
@@ -17,7 +17,7 @@ const Index = () => {
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const mockFiles: MarketFile[] = marketData; //for mock data currently
+  const mockFiles: MarketFile[] = mockFileData; //for mock data currently
 
   const files = mockFiles.filter(file =>
     file.name.toLowerCase().includes(searchQuery.toLowerCase())

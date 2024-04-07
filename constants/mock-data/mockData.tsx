@@ -1,4 +1,4 @@
-export const marketData = [
+export const mockFileData = [
   {
     fileHash: 'QmXp4FGDzFbPzcypwA6rLf1LuA2jT2Z3MgJYVJuY8rhJFm',
     name: 'Avatar',
@@ -122,3 +122,14 @@ export const mockTransaction = [
     amount: 435.25,
   },
 ];
+
+export const mockMarketData1 = 
+  {
+    fileHash: 'demo1',
+    name: 'Minions 6',
+    size: 3000,
+    id: '1',
+    ip: '192.168.1.101',
+    port: 8080,
+    price: 0.05,
+  };
