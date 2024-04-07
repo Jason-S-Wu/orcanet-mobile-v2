@@ -3,14 +3,15 @@ import {
   ActivityIndicator,
   Alert,
   StyleSheet,
-  ScrollView,
+  SafeAreaView,
+  Animated,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {router} from 'expo-router';
 import {Button, Card, Text, Searchbar} from 'react-native-paper';
 import {marketData} from '@/constants/mock-data/MockMarketData';
 import {MarketFile} from '@/constants/types';
-import { fetchFromServer } from '@/constants/mock-data/mockServerRequest';
+import {fetchFromServer} from '@/constants/mock-data/mockServerRequest';
 
 const Index = () => {
   const [loading, setLoading] = useState(false);
@@ -64,39 +65,73 @@ const Index = () => {
     );
   }
 
-  return (
-    <ScrollView>
-      <View style={styles.container}>
-        {loading && (
-          <View style={styles.loadingOverlay}>
-            <ActivityIndicator color="#ffffff" size="large" />
-          </View>
-        )}
-        <Searchbar
-          style={styles.searchBar}
-          placeholder="Search file name..."
-          value={searchQuery}
-          onChangeText={text => setSearchQuery(text)}
-        />
+  const scrollY = useRef(new Animated.Value(0)).current;
 
-        {files.map((file, index) => (
-          <Card key={index} style={styles.card}>
-            <Card.Title
-              title={`${file.name}`}
-              subtitle={`Size: ${file.size} MB`}
-            />
-            <Card.Content>
-              <Text style={styles.text}>{`Hash: ${file.fileHash}`}</Text>
-            </Card.Content>
-            <Card.Actions>
-              <Button onPress={() => handleViewPress(file.name)}>
-                <Text>View</Text>
-              </Button>
-            </Card.Actions>
-          </Card>
-        ))}
-      </View>
-    </ScrollView>
+  const renderItem = ({item, index}: any) => {
+    const scale = scrollY.interpolate({
+      inputRange: [-1, 0, 250 * index, 250 * (index + 2)],
+      outputRange: [1, 1, 1, 0],
+    });
+
+    const opacity = scrollY.interpolate({
+      inputRange: [-1, 0, 250 * index, 250 * (index + 0.6)],
+      outputRange: [1, 1, 1, 0],
+    });
+
+    return (
+      <Animated.View
+        style={[
+          styles.item,
+          {
+            transform: [{scale}],
+            opacity,
+          },
+        ]}
+      >
+        <Card key={index} style={styles.card}>
+          <Card.Title
+            title={`${item.name}`}
+            subtitle={`Size: ${item.size} MB`}
+          />
+          <Card.Content>
+            <Text style={styles.text}>{`Hash: ${item.fileHash}`}</Text>
+          </Card.Content>
+          <Card.Actions>
+            <Button onPress={() => handleViewPress(item.name)}>
+              <Text>View</Text>
+            </Button>
+          </Card.Actions>
+        </Card>
+      </Animated.View>
+    );
+  };
+
+  return (
+    <View style={styles.container}>
+      {loading && (
+        <View style={styles.loadingOverlay}>
+          <ActivityIndicator color="#ffffff" size="large" />
+        </View>
+      )}
+      <Searchbar
+        style={styles.searchBar}
+        placeholder="Search file name..."
+        value={searchQuery}
+        onChangeText={text => setSearchQuery(text)}
+      />
+
+      <SafeAreaView>
+        <Animated.FlatList
+          data={files}
+          keyExtractor={item => item.fileHash}
+          renderItem={renderItem}
+          onScroll={Animated.event(
+            [{nativeEvent: {contentOffset: {y: scrollY}}}],
+            {useNativeDriver: true}
+          )}
+        />
+      </SafeAreaView>
+    </View>
   );
 };
 
@@ -123,6 +158,21 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 14,
+  },
+
+  item: {
+    flexDirection: 'row',
+    marginBottom: 20,
+    borderRadius: 10,
+    backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 10,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 20,
+    padding: 10,
   },
 });
 

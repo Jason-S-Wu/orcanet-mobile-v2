@@ -14,15 +14,35 @@ export const marketData = [
     name: 'Inception',
     size: 2200, // 2.2 GB
   },
-  // {
-  //   fileHash: 'QmUx6Qe3c56JpV93HZqo51FUsXbt7YvLpcRUPFDK5ewFL3',
-  //   name: 'Barbie',
-  //   size: 2500, // 2.5 GB
-  // },
-  // {
-  //   fileHash: 'QmUx6Qe3c56JpV93HZqo51FUsXbt7YvLpcRUPFDK5ewFL4',
-  //   name: 'Minions',
-  //   size: 2200, // 1.2 GB
-  // },
+  {
+    fileHash: 'QmUx6Qe3c56JpV93HZqo51FUsXbt7YvLpcRUPFDK5ewFL3',
+    name: 'Barbie',
+    size: 2500, // 2.5 GB
+  },
+  {
+    fileHash: 'QmUx6Qe3c56JpV93HZqo51FUsXbt7YvLpcRUPFDK5ewFL4',
+    name: 'Minions',
+    size: 2200, // 1.2 GB
+  },
+  {
+    fileHash: 'QmUx6Qe3c56JpV93HZqo51FUsXbt7YvLpcRUPFDK5ewFL5',
+    name: 'Minions 2',
+    size: 2200, // 1.2 GB
+  },
+  {
+    fileHash: 'QmUx6Qe3c56JpV93HZqo51FUsXbt7YvLpcRUPFDK5ewFL6',
+    name: 'Minions 3',
+    size: 2200, // 1.2 GB
+  },
+  {
+    fileHash: 'QmUx6Qe3c56JpV93HZqo51FUsXbt7YvLpcRUPFDK5ewFL7',
+    name: 'Minions 4',
+    size: 2200, // 1.2 GB
+  },
+  {
+    fileHash: 'QmUx6Qe3c56JpV93HZqo51FUsXbt7YvLpcRUPFDK5ewFL8',
+    name: 'Minions 5',
+    size: 2200, // 1.2 GB
+  },
   // Add more mock files as needed
 ];
