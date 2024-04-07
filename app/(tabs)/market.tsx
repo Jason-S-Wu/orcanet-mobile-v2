@@ -52,7 +52,6 @@ const Market = () => {
   };
 
   const toggleDetails = () => {
-    console.log(showDetails);
     setShowDetails(!showDetails);
   };
 
