@@ -6,9 +6,13 @@ import {MaterialIcons} from '@expo/vector-icons';
 import {LineChart} from 'react-native-gifted-charts';
 import {mockStatsMonthData} from '@/constants/mock-data/mockData';
 import theme from '@/constants/Colors';
+import {useRoute} from '@react-navigation/native';
+import {MobileUser} from '@/constants/types';
 
 const Profile = () => {
   const router = useRouter();
+  const route = useRoute();
+  const {user} = route.params as {user: MobileUser};
 
   return (
     <View>
@@ -23,12 +27,9 @@ const Profile = () => {
         Account
       </Text>
       <Text style={{marginLeft: 20, fontSize: 18}}>
-        User ID:{' '}
-        <Text style={{fontSize: 10}}>
-          d9b58304b42647c42ccf62f9d856a292e447b387a5b6a9fc9dd784b1884297ba
-        </Text>
+        User ID: <Text style={{fontSize: 14}}>{user.id}</Text>
       </Text>
-      <Text style={{marginLeft: 20, fontSize: 18}}>Balance: 0.00</Text>
+      <Text style={{marginLeft: 20, fontSize: 18}}>Balance: {user.amount}</Text>
       <Divider />
       <Text
         style={{

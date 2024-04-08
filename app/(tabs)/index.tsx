@@ -9,19 +9,31 @@ import {
 import React, {useRef, useState} from 'react';
 import {router} from 'expo-router';
 import {Button, Card, Text, Searchbar} from 'react-native-paper';
+import {FontAwesome5} from '@expo/vector-icons';
 import {mockFileData} from '@/constants/mock-data/mockData';
-import {MarketFile} from '@/constants/types';
+import {MarketFile, MobileUser} from '@/constants/types';
 import {fetchFromServer} from '@/constants/mock-data/mockServerRequest';
+import {useRoute} from '@react-navigation/native';
 
 const Index = () => {
+  const route = useRoute();
+  const {user} = route.params as {user: MobileUser};
+
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [myFiles, setMyFiles] = useState<MarketFile[]>(mockFileData);
 
-  const mockFiles: MarketFile[] = mockFileData; //for mock data currently
-
-  const files = mockFiles.filter(file =>
+  const files = myFiles.filter(file =>
     file.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const handleDeleteFile = (file: MarketFile) => {
+    const updatedFiles = myFiles.filter(f => f.fileHash !== file.fileHash);
+    if (updatedFiles.length === 0) {
+      setMyFiles([]);
+    }
+    setMyFiles(updatedFiles);
+  };
 
   const handleViewPress = async (fileName: string) => {
     setLoading(true);
@@ -49,21 +61,6 @@ const Index = () => {
       }, 5000); // change timeout limit here
     });
   };
-
-  if (mockFiles.length === 0) {
-    return (
-      <Card style={styles.card}>
-        <Card.Content>
-          <Text style={styles.text}>Please Download Files From Market</Text>
-        </Card.Content>
-        <Card.Actions>
-          <Button onPress={() => router.push('/(tabs)/market')}>
-            Go To Market
-          </Button>
-        </Card.Actions>
-      </Card>
-    );
-  }
 
   const scrollY = useRef(new Animated.Value(0)).current;
 
@@ -97,7 +94,13 @@ const Index = () => {
             <Text style={styles.text}>{`Hash: ${item.fileHash}`}</Text>
           </Card.Content>
           <Card.Actions>
-            <Button onPress={() => handleViewPress(item.name)}>
+            <Button onPress={() => handleDeleteFile(item)}>
+              <FontAwesome5 name="trash" size={20} color="#FF0000" />
+            </Button>
+            <Button
+              onPress={() => handleViewPress(item.name)}
+              style={styles.viewButton}
+            >
               <Text>View</Text>
             </Button>
           </Card.Actions>
@@ -120,18 +123,31 @@ const Index = () => {
         onChangeText={text => setSearchQuery(text)}
       />
 
-      <SafeAreaView>
-        <Animated.FlatList
-          data={files}
-          keyExtractor={item => item.fileHash}
-          renderItem={renderItem}
-          onScroll={Animated.event(
-            [{nativeEvent: {contentOffset: {y: scrollY}}}],
-            {useNativeDriver: true}
-          )}
-          contentContainerStyle={{paddingBottom: 100}}
-        />
-      </SafeAreaView>
+      {myFiles.length === 0 ? (
+        <Card style={styles.card}>
+          <Card.Content>
+            <Text style={styles.text}>Please Download Files From Market</Text>
+          </Card.Content>
+          <Card.Actions>
+            <Button onPress={() => router.push('/(tabs)/market')}>
+              Go To Market
+            </Button>
+          </Card.Actions>
+        </Card>
+      ) : (
+        <SafeAreaView>
+          <Animated.FlatList
+            data={files}
+            keyExtractor={item => item.fileHash}
+            renderItem={renderItem}
+            onScroll={Animated.event(
+              [{nativeEvent: {contentOffset: {y: scrollY}}}],
+              {useNativeDriver: true}
+            )}
+            contentContainerStyle={{paddingBottom: 100}}
+          />
+        </SafeAreaView>
+      )}
     </View>
   );
 };
@@ -161,7 +177,6 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 14,
   },
-
   item: {
     flexDirection: 'row',
     marginBottom: 5,
@@ -175,6 +190,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 20,
     padding: 10,
+  },
+  viewButton: {
+    backgroundColor: '#ADD8E6',
   },
 });
 

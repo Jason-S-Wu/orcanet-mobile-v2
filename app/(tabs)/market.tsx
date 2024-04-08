@@ -1,19 +1,23 @@
 import React, {useEffect, useState} from 'react';
-import {View, ActivityIndicator, Alert} from 'react-native';
 import {
-  Card,
-  Searchbar,
-  Text,
-  Button,
-  Snackbar,
-  ProgressBar,
-} from 'react-native-paper';
+  View,
+  ActivityIndicator,
+  Alert,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
+import {Card, Searchbar, Text, Snackbar, ProgressBar} from 'react-native-paper';
 
 import {getDataFromMarketRequest} from '@/constants/mock-data/mockServerRequest';
 import {buyFileRequest} from '@/constants/mock-data/mockServerRequest';
-import {MarketInfo} from '@/constants/types';
+import {MarketFile, MarketInfo, MobileUser} from '@/constants/types';
+import theme from '@/constants/Colors';
+import {useRoute} from '@react-navigation/native';
 
 const Market = () => {
+  const route = useRoute();
+  const {user} = route.params as {user: MobileUser};
+
   const [hash, setHash] = useState<string>('');
   const [loading, setLoading] = useState<Boolean>(false);
   const [fileDetails, setFileDetails] = useState<MarketInfo>();
@@ -52,6 +56,11 @@ const Market = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const checkIsDownloaded = (id: string) => {
+    const file_ids = user.files.map(f => f.fileHash);
+    return file_ids.includes(id);
   };
 
   const timeoutPromise = () => {
@@ -94,9 +103,16 @@ const Market = () => {
         await new Promise<void>(resolve => {
           let progress = 0;
           const interval = setInterval(() => {
-            progress += Math.random() * 100;
+            progress += Math.random() * 1000;
             if (fileDetails && progress >= fileDetails.size) {
               clearInterval(interval);
+              const newFile: MarketFile = {
+                fileHash: fileDetails.fileHash,
+                name: fileDetails.name,
+                size: fileDetails.size,
+              };
+              user.files.unshift(newFile);
+              user.amount = user.amount - fileDetails.price * fileDetails.size;
               resolve();
             }
             setDownloadProgress(progress);
@@ -109,19 +125,23 @@ const Market = () => {
   }, [showDownload]);
 
   const downloadBar = (fileSize: number) => {
-    const progressPercentage = Math.min(
-      (downloadProgress / fileSize) * 100,
-      100
-    ).toFixed(2);
-
+    const progressPercentage = Number(
+      Math.min((downloadProgress / fileSize) * 100, 100).toFixed(2)
+    );
+    const blueComponent = Math.round((progressPercentage * 128) / 100);
+    const progressBarColor = `rgb(0, ${255 - blueComponent * 2}, ${
+      255 - blueComponent
+    })`;
     return (
       <View style={{marginTop: 10}}>
         <ProgressBar
-          progress={Number(progressPercentage) / 100}
-          color="#6200ee"
-          style={{height: 20, borderRadius: 10, width: '100%'}}
+          progress={progressPercentage / 100}
+          color={progressBarColor}
+          style={{height: 20, borderRadius: 15, width: '100%'}}
         />
-        <Text style={{marginTop: 5, alignItems: 'center'}}>{progressPercentage}%</Text>
+        <Text style={{marginTop: 5, alignItems: 'center'}}>
+          {progressPercentage}%
+        </Text>
       </View>
     );
   };
@@ -142,7 +162,7 @@ const Market = () => {
           style={{marginTop: 20}}
         />
       ) : fileDetails ? (
-        <Card style={{marginTop: 0, margin: 20, padding: 5}}>
+        <Card style={styles.cardContainer}>
           <Card.Title
             title={`File Name: ${fileDetails.name}`}
             subtitle={`Cost: ${fileDetails.price * fileDetails.size}`}
@@ -150,23 +170,59 @@ const Market = () => {
           {showDetails ? (
             <Card.Content>
               <View>
-                <Text>Owner ID: {fileDetails.id}</Text>
-                <Text>IP: {fileDetails.ip}</Text>
-                <Text>PORT: {fileDetails.port}</Text>
-                <Text>Cost Per MB: {fileDetails.price}</Text>
-                <Text>Size: {fileDetails.size} MB</Text>
-                {showDownload ? (
+                <View style={styles.container}>
+                  <View style={styles.row}>
+                    <Text style={styles.label}>File Hash:</Text>
+                    <Text style={styles.value}>{fileDetails.fileHash}</Text>
+                  </View>
+                  <View style={styles.row}>
+                    <Text style={styles.label}>Cost Per MB:</Text>
+                    <Text style={styles.value}>{fileDetails.price}</Text>
+                  </View>
+                  <View style={styles.row}>
+                    <Text style={styles.label}>Size:</Text>
+                    <Text style={styles.value}>{fileDetails.size} MB</Text>
+                  </View>
+                  <View style={styles.row}>
+                    <Text style={styles.label}>User ID:</Text>
+                    <Text style={styles.value}>{fileDetails.id}</Text>
+                  </View>
+                  <View style={styles.row}>
+                    <Text style={styles.label}>IP:</Text>
+                    <Text style={styles.value}>{fileDetails.ip}</Text>
+                  </View>
+                  <View style={styles.row}>
+                    <Text style={styles.label}>Port:</Text>
+                    <Text style={styles.value}>{fileDetails.port}</Text>
+                  </View>
+                </View>
+
+                {checkIsDownloaded(fileDetails.fileHash) ? (
+                  <View>
+                    <Text>Already Download</Text>
+                  </View>
+                ) : showDownload ? (
                   downloadBar(fileDetails.size)
                 ) : (
-                  <Button onPress={() => buyFile(fileDetails)}>Buy File</Button>
+                  <TouchableOpacity
+                    onPress={() => buyFile(fileDetails)}
+                    style={styles.buyButton}
+                  >
+                    <Text style={styles.buyButtonText}>Buy File</Text>
+                  </TouchableOpacity>
                 )}
               </View>
             </Card.Content>
           ) : null}
           <Card.Actions>
-            <Button onPress={() => toggleDetails()}>
-              {showDetails ? 'Hide Details' : 'View Details'}
-            </Button>
+            <TouchableOpacity
+              onPress={() => toggleDetails()}
+              style={styles.detailsButton}
+            >
+              <Text style={styles.detailsButtonText}>
+                {showDetails ? 'Hide Details' : 'View Details'}
+              </Text>
+            </TouchableOpacity>
           </Card.Actions>
         </Card>
       ) : null}
@@ -195,5 +251,75 @@ const Market = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  cardContainer: {
+    marginTop: 0,
+    margin: 20,
+    padding: 10,
+    backgroundColor: '#f0f4fb',
+    borderRadius: 8,
+    shadowColor: theme.colors.shadow,
+    shadowOpacity: 0.2,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    elevation: 2,
+  },
+  container: {
+    backgroundColor: theme.colors.primaryContainer,
+    padding: 20,
+    borderRadius: 10,
+    marginHorizontal: 10,
+    marginVertical: 5,
+    elevation: 5,
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  label: {
+    color: theme.colors.onPrimaryContainer,
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  value: {
+    color: theme.colors.onPrimaryContainer,
+    fontSize: 16,
+  },
+  buyButton: {
+    marginTop: 15,
+    backgroundColor: '#ADD8E6',
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buyButtonText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  detailsButton: {
+    backgroundColor: '#ADD8E6',
+    padding: 10,
+    borderRadius: 15,
+    marginTop: 10,
+    alignItems: 'center',
+  },
+  detailsButtonText: {
+    fontSize: 16,
+  },
+});
 
 export default Market;

@@ -23,6 +23,13 @@ export type Transaction = {
 export type Stats = {
   label: string;
   value: number;
-}
+};
+
+export type MobileUser = {
+  files: MarketFile[];
+  id: string;
+  amount: number;
+  transactions: Transaction[];
+};
 
 export type MarketInfo = User & MarketFile; // the name in this type is for MarketFile's name

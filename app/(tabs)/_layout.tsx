@@ -2,8 +2,11 @@ import React from 'react';
 import {Tabs} from 'expo-router';
 import {FontAwesome, FontAwesome5} from '@expo/vector-icons';
 import theme from '@/constants/Colors';
+import {User1, User2, User3} from '@/constants/mock-data/mockData';
 
 const Layout = () => {
+  const user = User1;
+
   return (
     <Tabs
       screenOptions={{
@@ -15,6 +18,7 @@ const Layout = () => {
     >
       <Tabs.Screen
         name="index" // index is the default route in this case it's files
+        initialParams={{user}}
         options={{
           tabBarLabel: 'Files',
           tabBarIcon: ({color, size}) => (
@@ -25,6 +29,7 @@ const Layout = () => {
       />
       <Tabs.Screen
         name="market"
+        initialParams={{user}}
         options={{
           tabBarLabel: 'Market',
           tabBarIcon: ({color, size}) => (
@@ -35,6 +40,7 @@ const Layout = () => {
       />
       <Tabs.Screen
         name="profile"
+        initialParams={{user}}
         options={{
           tabBarLabel: 'Profile',
           tabBarIcon: ({color, size}) => (
