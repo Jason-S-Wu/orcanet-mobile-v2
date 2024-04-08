@@ -1,13 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {View, ActivityIndicator, Alert, StyleSheet, TouchableOpacity} from 'react-native';
 import {
-  Card,
-  Searchbar,
-  Text,
-  Button,
-  Snackbar,
-  ProgressBar,
-} from 'react-native-paper';
+  View,
+  ActivityIndicator,
+  Alert,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
+import {Card, Searchbar, Text, Snackbar, ProgressBar} from 'react-native-paper';
 
 import {getDataFromMarketRequest} from '@/constants/mock-data/mockServerRequest';
 import {buyFileRequest} from '@/constants/mock-data/mockServerRequest';
@@ -144,7 +143,7 @@ const Market = () => {
           style={{marginTop: 20}}
         />
       ) : fileDetails ? (
-        <Card style={{marginTop: 0, margin: 20, padding: 5}}>
+        <Card style={styles.cardContainer}>
           <Card.Title
             title={`File Name: ${fileDetails.name}`}
             subtitle={`Cost: ${fileDetails.price * fileDetails.size}`}
@@ -152,7 +151,8 @@ const Market = () => {
           {showDetails ? (
             <Card.Content>
               <View>
-                <Text>Owner ID: {fileDetails.id}</Text>
+                <Text>File Hash: {fileDetails.fileHash}</Text>
+                <Text>User ID: {fileDetails.id}</Text>
                 <Text>IP: {fileDetails.ip}</Text>
                 <Text>PORT: {fileDetails.port}</Text>
                 <Text>Cost Per MB: {fileDetails.price}</Text>
@@ -162,9 +162,9 @@ const Market = () => {
                 ) : (
                   <TouchableOpacity
                     onPress={() => buyFile(fileDetails)}
-                    style={styles.BuyButton}
+                    style={styles.buyButton}
                   >
-                    <Text style={styles.BuyButtonText}>Buy File</Text>
+                    <Text style={styles.buyButtonText}>Buy File</Text>
                   </TouchableOpacity>
                 )}
               </View>
@@ -173,9 +173,9 @@ const Market = () => {
           <Card.Actions>
             <TouchableOpacity
               onPress={() => toggleDetails()}
-              style={styles.DetailsButton}
+              style={styles.detailsButton}
             >
-              <Text style={styles.DetailsButtonText}>
+              <Text style={styles.detailsButtonText}>
                 {showDetails ? 'Hide Details' : 'View Details'}
               </Text>
             </TouchableOpacity>
@@ -209,7 +209,21 @@ const Market = () => {
 };
 
 const styles = StyleSheet.create({
-  BuyButton: {
+  cardContainer: {
+    marginTop: 0, 
+    margin: 20, 
+    padding: 10,
+    backgroundColor: '#ffffff',
+    borderRadius: 8,
+    shadowColor: '#000000',
+    shadowOpacity: 0.2,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    elevation: 2,
+  },
+  buyButton: {
     marginTop: 15,
     backgroundColor: '#4CAF50',
     paddingVertical: 12,
@@ -226,19 +240,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  BuyButtonText: {
+  buyButtonText: {
     color: '#FFF', // White text color
     fontSize: 18,
     fontWeight: 'bold',
   },
-  DetailsButton: {
+  detailsButton: {
     backgroundColor: '#007bff',
     padding: 10,
     borderRadius: 15,
     marginTop: 10,
     alignItems: 'center',
   },
-  DetailsButtonText: {
+  detailsButtonText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
