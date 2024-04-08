@@ -10,7 +10,7 @@ import {Card, Searchbar, Text, Snackbar, ProgressBar} from 'react-native-paper';
 
 import {getDataFromMarketRequest} from '@/constants/mock-data/mockServerRequest';
 import {buyFileRequest} from '@/constants/mock-data/mockServerRequest';
-import {MarketInfo, MobileUser} from '@/constants/types';
+import {MarketFile, MarketInfo, MobileUser} from '@/constants/types';
 import theme from '@/constants/Colors';
 import {useRoute} from '@react-navigation/native';
 
@@ -58,6 +58,11 @@ const Market = () => {
     }
   };
 
+  const checkIsDownloaded = (id: string) => {
+    const file_ids = user.files.map(f => f.fileHash);
+    return file_ids.includes(id);
+  };
+
   const timeoutPromise = () => {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -98,9 +103,16 @@ const Market = () => {
         await new Promise<void>(resolve => {
           let progress = 0;
           const interval = setInterval(() => {
-            progress += Math.random() * 100;
+            progress += Math.random() * 1000;
             if (fileDetails && progress >= fileDetails.size) {
               clearInterval(interval);
+              const newFile: MarketFile = {
+                fileHash: fileDetails.fileHash,
+                name: fileDetails.name,
+                size: fileDetails.size,
+              };
+              user.files.unshift(newFile);
+              user.amount = user.amount - fileDetails.price * fileDetails.size;
               resolve();
             }
             setDownloadProgress(progress);
@@ -185,7 +197,11 @@ const Market = () => {
                   </View>
                 </View>
 
-                {showDownload ? (
+                {checkIsDownloaded(fileDetails.fileHash) ? (
+                  <View>
+                    <Text>Already Download</Text>
+                  </View>
+                ) : showDownload ? (
                   downloadBar(fileDetails.size)
                 ) : (
                   <TouchableOpacity

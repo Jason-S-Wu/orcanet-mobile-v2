@@ -133,6 +133,16 @@ export const mockMarketData1 = {
   price: 0.05,
 };
 
+export const mockMarketData2 = {
+  fileHash: 'demo2',
+  name: 'Minions 7',
+  size: 2000,
+  id: '2',
+  ip: '192.168.1.103',
+  port: 8080,
+  price: 0.06,
+};
+
 export const mockStatsMonthData = [
   {label: '', value: 0},
   {label: 'Jan', value: 50},

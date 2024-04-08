@@ -13,7 +13,7 @@ import {FontAwesome5} from '@expo/vector-icons';
 import {mockFileData} from '@/constants/mock-data/mockData';
 import {MarketFile, MobileUser} from '@/constants/types';
 import {fetchFromServer} from '@/constants/mock-data/mockServerRequest';
-import { useRoute } from '@react-navigation/native';
+import {useRoute} from '@react-navigation/native';
 
 const Index = () => {
   const route = useRoute();

@@ -29,7 +29,7 @@ export type MobileUser = {
   files: MarketFile[];
   id: string;
   amount: number;
-  transactions: Transaction;
+  transactions: Transaction[];
 };
 
 export type MarketInfo = User & MarketFile; // the name in this type is for MarketFile's name
