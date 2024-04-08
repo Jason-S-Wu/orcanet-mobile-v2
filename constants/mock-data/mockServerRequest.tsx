@@ -1,5 +1,5 @@
 import {MarketInfo} from '../types';
-import { mockMarketData1 } from "./mockData";
+import {mockMarketData1} from './mockData';
 
 //mock server response for testing purpose can be removed once we connec to peer
 export const fetchFromServer = (fileName: string) => {
@@ -10,7 +10,10 @@ export const fetchFromServer = (fileName: string) => {
   });
 };
 
-export const getDataFromMarketRequest = (hash: string): Promise<MarketInfo | null> => {
+// TODO: need to connect to peernode to fetch file if success
+export const getDataFromMarketRequest = (
+  hash: string
+): Promise<MarketInfo | null> => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       // Request here
@@ -18,6 +21,21 @@ export const getDataFromMarketRequest = (hash: string): Promise<MarketInfo | nul
 
       // Mock example
       resolve(mockMarketData1);
+    }, 2000); // Adjust the timeout as needed
+  });
+};
+
+// TODO: need to connect to blockchain to store transaction if success
+export const buyFileRequest = (fileInfo: MarketInfo): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      // Simulate success or failure randomly
+      const success = true;
+      if (success) {
+        resolve('success'); // Resolve the promise for success
+      } else {
+        reject('Error');
+      }
     }, 2000); // Adjust the timeout as needed
   });
 };
