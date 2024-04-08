@@ -173,7 +173,14 @@ const Market = () => {
                 <View style={styles.container}>
                   <View style={styles.row}>
                     <Text style={styles.label}>File Hash:</Text>
-                    <Text style={styles.value}>{fileDetails.fileHash}</Text>
+                    <Text
+                      style={styles.value}
+                    >{`${fileDetails.fileHash.substring(
+                      0,
+                      10
+                    )}...${fileDetails.fileHash.substring(
+                      fileDetails.fileHash.length - 10
+                    )}`}</Text>
                   </View>
                   <View style={styles.row}>
                     <Text style={styles.label}>Cost Per MB:</Text>
