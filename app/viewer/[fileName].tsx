@@ -25,8 +25,8 @@ const Viewer = () => {
           style={styles.video}
           source={{
             uri:
-              'http://192.168.50.212:5000/video?fileName=' +
-              encodeURI(fileName), // CHANGE THIS TO YOUR LOCAL IP
+              'http://64.176.201.168:5000/video?fileName=' +
+              encodeURI(fileName), // TESTING SERVER ONLY
           }}
           useNativeControls
           resizeMode={ResizeMode.CONTAIN}
