@@ -123,13 +123,23 @@ export const mockTransaction = [
   },
 ];
 
-export const mockMarketData1 = 
-  {
-    fileHash: 'demo1',
-    name: 'Minions 6',
-    size: 3000,
-    id: '1',
-    ip: '192.168.1.101',
-    port: 8080,
-    price: 0.05,
-  };
+export const mockMarketData1 = {
+  fileHash: 'demo1',
+  name: 'Minions 6',
+  size: 3000,
+  id: '1',
+  ip: '192.168.1.101',
+  port: 8080,
+  price: 0.05,
+};
+
+export const mockStatsMonthData = [
+  {label: '', value: 0},
+  {label: 'Jan', value: 50},
+  {label: 'Feb', value: 90},
+  {label: 'Mar', value: 70},
+  {label: 'Apr', value: 120},
+  {label: 'May', value: 180},
+  {label: 'Jun', value: 140},
+  {label: 'Jul', value: 90},
+];

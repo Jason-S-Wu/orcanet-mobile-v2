@@ -20,4 +20,9 @@ export type Transaction = {
   amount: number;
 };
 
+export type Stats = {
+  label: string;
+  value: number;
+}
+
 export type MarketInfo = User & MarketFile; // the name in this type is for MarketFile's name
