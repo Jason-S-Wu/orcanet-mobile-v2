@@ -95,7 +95,7 @@ const Market = () => {
           let progress = 0;
           const interval = setInterval(() => {
             progress += Math.random() * 100;
-            if (progress >= fileDetails?.size) {
+            if (fileDetails && progress >= fileDetails.size) {
               clearInterval(interval);
               resolve();
             }
