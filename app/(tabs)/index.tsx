@@ -25,6 +25,9 @@ const Index = () => {
 
   const handleDeleteFile = (file: MarketFile) => {
     const updatedFiles = myFiles.filter(f => f.fileHash !== file.fileHash);
+    if (updatedFiles.length === 0) {
+      setMyFiles([]);
+    }
     setMyFiles(updatedFiles);
   };
 
@@ -54,21 +57,6 @@ const Index = () => {
       }, 5000); // change timeout limit here
     });
   };
-
-  if (myFiles.length === 0) {
-    return (
-      <Card style={styles.card}>
-        <Card.Content>
-          <Text style={styles.text}>Please Download Files From Market</Text>
-        </Card.Content>
-        <Card.Actions>
-          <Button onPress={() => router.push('/(tabs)/market')}>
-            Go To Market
-          </Button>
-        </Card.Actions>
-      </Card>
-    );
-  }
 
   const scrollY = useRef(new Animated.Value(0)).current;
 
@@ -131,18 +119,31 @@ const Index = () => {
         onChangeText={text => setSearchQuery(text)}
       />
 
-      <SafeAreaView>
-        <Animated.FlatList
-          data={files}
-          keyExtractor={item => item.fileHash}
-          renderItem={renderItem}
-          onScroll={Animated.event(
-            [{nativeEvent: {contentOffset: {y: scrollY}}}],
-            {useNativeDriver: true}
-          )}
-          contentContainerStyle={{paddingBottom: 100}}
-        />
-      </SafeAreaView>
+      {myFiles.length === 0 ? (
+        <Card style={styles.card}>
+          <Card.Content>
+            <Text style={styles.text}>Please Download Files From Market</Text>
+          </Card.Content>
+          <Card.Actions>
+            <Button onPress={() => router.push('/(tabs)/market')}>
+              Go To Market
+            </Button>
+          </Card.Actions>
+        </Card>
+      ) : (
+        <SafeAreaView>
+          <Animated.FlatList
+            data={files}
+            keyExtractor={item => item.fileHash}
+            renderItem={renderItem}
+            onScroll={Animated.event(
+              [{nativeEvent: {contentOffset: {y: scrollY}}}],
+              {useNativeDriver: true}
+            )}
+            contentContainerStyle={{paddingBottom: 100}}
+          />
+        </SafeAreaView>
+      )}
     </View>
   );
 };
