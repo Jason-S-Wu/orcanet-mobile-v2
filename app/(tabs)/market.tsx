@@ -11,6 +11,7 @@ import {Card, Searchbar, Text, Snackbar, ProgressBar} from 'react-native-paper';
 import {getDataFromMarketRequest} from '@/constants/mock-data/mockServerRequest';
 import {buyFileRequest} from '@/constants/mock-data/mockServerRequest';
 import {MarketInfo} from '@/constants/types';
+import theme from '@/constants/Colors';
 
 const Market = () => {
   const [hash, setHash] = useState<string>('');
@@ -236,9 +237,9 @@ const styles = StyleSheet.create({
     marginTop: 0,
     margin: 20,
     padding: 10,
-    backgroundColor: '#E0E0E0',
+    backgroundColor: '#f0f4fb',
     borderRadius: 8,
-    shadowColor: '#000000',
+    shadowColor: theme.colors.shadow,
     shadowOpacity: 0.2,
     shadowOffset: {
       width: 0,
@@ -247,7 +248,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   container: {
-    backgroundColor: '#616161',
+    backgroundColor: theme.colors.primaryContainer,
     padding: 20,
     borderRadius: 10,
     marginHorizontal: 10,
@@ -260,17 +261,17 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   label: {
-    color: '#64FFDA',
+    color: theme.colors.onPrimaryContainer,
     fontWeight: 'bold',
     fontSize: 16,
   },
   value: {
-    color: '#FFFFFF',
+    color: theme.colors.onPrimaryContainer,
     fontSize: 16,
   },
   buyButton: {
     marginTop: 15,
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#ADD8E6',
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 8,
@@ -286,21 +287,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   buyButtonText: {
-    color: '#FFF',
     fontSize: 18,
     fontWeight: 'bold',
   },
   detailsButton: {
-    backgroundColor: '#007bff',
+    backgroundColor: '#ADD8E6',
     padding: 10,
     borderRadius: 15,
     marginTop: 10,
     alignItems: 'center',
   },
   detailsButtonText: {
-    color: '#fff',
     fontSize: 16,
-    fontWeight: 'bold',
   },
 });
 
