@@ -10,7 +10,12 @@ import {Card, Searchbar, Text, Snackbar, ProgressBar} from 'react-native-paper';
 
 import {getDataFromMarketRequest} from '@/constants/mock-data/mockServerRequest';
 import {buyFileRequest} from '@/constants/mock-data/mockServerRequest';
-import {MarketFile, MarketInfo, MobileUser} from '@/constants/types';
+import {
+  MarketFile,
+  MarketInfo,
+  MobileUser,
+  Transaction,
+} from '@/constants/types';
 import theme from '@/constants/Colors';
 import {useRoute} from '@react-navigation/native';
 
@@ -111,7 +116,15 @@ const Market = () => {
                 name: fileDetails.name,
                 size: fileDetails.size,
               };
+              const newtrans: Transaction = {
+                id: 'mno345hbdou18dh2h12ppnewID',
+                note: fileDetails.name,
+                status: 'success',
+                date: '2024-04-08',
+                amount: fileDetails.price * fileDetails.size,
+              };
               user.files.unshift(newFile);
+              user.transactions.unshift(newtrans);
               user.amount = user.amount - fileDetails.price * fileDetails.size;
               resolve();
             }
