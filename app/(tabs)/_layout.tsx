@@ -18,6 +18,7 @@ const Layout = () => {
     >
       <Tabs.Screen
         name="index" // index is the default route in this case it's files
+        initialParams={{user}}
         options={{
           tabBarLabel: 'Files',
           tabBarIcon: ({color, size}) => (
@@ -28,6 +29,7 @@ const Layout = () => {
       />
       <Tabs.Screen
         name="market"
+        initialParams={{user}}
         options={{
           tabBarLabel: 'Market',
           tabBarIcon: ({color, size}) => (

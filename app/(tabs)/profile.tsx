@@ -7,11 +7,12 @@ import {LineChart} from 'react-native-gifted-charts';
 import {mockStatsMonthData} from '@/constants/mock-data/mockData';
 import theme from '@/constants/Colors';
 import {useRoute} from '@react-navigation/native';
+import {MobileUser} from '@/constants/types';
 
 const Profile = () => {
-  const route = useRoute();
   const router = useRouter();
-  const {user} = route.params;
+  const route = useRoute();
+  const {user} = route.params as {user: MobileUser};
 
   return (
     <View>

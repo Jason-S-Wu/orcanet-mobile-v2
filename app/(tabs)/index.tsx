@@ -11,10 +11,14 @@ import {router} from 'expo-router';
 import {Button, Card, Text, Searchbar} from 'react-native-paper';
 import {FontAwesome5} from '@expo/vector-icons';
 import {mockFileData} from '@/constants/mock-data/mockData';
-import {MarketFile} from '@/constants/types';
+import {MarketFile, MobileUser} from '@/constants/types';
 import {fetchFromServer} from '@/constants/mock-data/mockServerRequest';
+import { useRoute } from '@react-navigation/native';
 
 const Index = () => {
+  const route = useRoute();
+  const {user} = route.params as {user: MobileUser};
+
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [myFiles, setMyFiles] = useState<MarketFile[]>(mockFileData);

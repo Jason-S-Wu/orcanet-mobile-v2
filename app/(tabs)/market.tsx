@@ -10,10 +10,14 @@ import {Card, Searchbar, Text, Snackbar, ProgressBar} from 'react-native-paper';
 
 import {getDataFromMarketRequest} from '@/constants/mock-data/mockServerRequest';
 import {buyFileRequest} from '@/constants/mock-data/mockServerRequest';
-import {MarketInfo} from '@/constants/types';
+import {MarketInfo, MobileUser} from '@/constants/types';
 import theme from '@/constants/Colors';
+import {useRoute} from '@react-navigation/native';
 
 const Market = () => {
+  const route = useRoute();
+  const {user} = route.params as {user: MobileUser};
+
   const [hash, setHash] = useState<string>('');
   const [loading, setLoading] = useState<Boolean>(false);
   const [fileDetails, setFileDetails] = useState<MarketInfo>();
