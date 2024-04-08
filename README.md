@@ -2,7 +2,7 @@
 
 Stony Brook University CSE 416 Project
 
-OrcaNet Mobile v2 is a React Native application developed as part of the CSE 416 project at Stony Brook University. It aims to [brief description of the project's purpose or goals].
+OrcaNet Mobile v2 is a React Native application developed as part of the CSE 416 project at Stony Brook University.
 
 ## Getting Started
 

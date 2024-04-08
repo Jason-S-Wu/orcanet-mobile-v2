@@ -143,3 +143,22 @@ export const mockStatsMonthData = [
   {label: 'Jun', value: 140},
   {label: 'Jul', value: 90},
 ];
+
+
+export const User1 = {
+  files: mockFileData,
+  id: "Pretend this is USER 1 ID",
+  amount: 100000,
+}
+
+export const User2 = {
+  files: [],
+  id: 'Pretend this is USER 2 ID',
+  amount: 100000,
+};
+
+export const User3 = {
+  files: [],
+  id: 'Pretend this is USER 3 ID',
+  amount: 0,
+};
