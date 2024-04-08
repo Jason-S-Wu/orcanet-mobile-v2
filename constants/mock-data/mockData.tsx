@@ -1,5 +1,35 @@
 export const mockFileData = [
   {
+    fileHash:
+      '048102a4f190995555a330eb8ae28fd8ab9b0e630033ba9377d54eb2d262a4eb',
+    name: 'Pottery',
+    size: 2000, // 2 GB
+  },
+  {
+    fileHash:
+      '1af813df540bd115290d73ae360e8134aa28bf72af331e713a7e1c850e6c045f',
+    name: 'Dark-Green',
+    size: 2000, // 2 GB
+  },
+  {
+    fileHash:
+      'eca144fa26342d9e5cc9ce9d9d1f889da7b9111cb1a2fead756243900a2c961a',
+    name: 'Green',
+    size: 2000, // 2 GB
+  },
+  {
+    fileHash:
+      '877f8f8ba012157ad72930c5cae3a001962b8223ff1ccc4ce917982143ed8ff8',
+    name: 'Purple',
+    size: 2000, // 2 GB
+  },
+  {
+    fileHash:
+      'c7c0b0caf20d657c0f8e1f9d1c28a94de941a85d9d5667b4f9eab31a7232d4a3',
+    name: 'Hands',
+    size: 2000, // 2 GB
+  },
+  {
     fileHash: 'QmXp4FGDzFbPzcypwA6rLf1LuA2jT2Z3MgJYVJuY8rhJFm',
     name: 'Avatar',
     size: 2000, // 2 GB

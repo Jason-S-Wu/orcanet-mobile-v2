@@ -6,11 +6,16 @@ app = Flask(__name__)
 @app.route('/video')
 def stream_video():
     hash_value = request.args.get('hash')
+    fileName = request.args.get('fileName') # this is just temporary for testing
 
-    with open('./sample-videos/hashes.json') as f:
-        hash_to_filename = json.load(f)
+    if hash_value is None:
+        video_path = f"./sample-videos/{fileName}.mp4"
+    else:
+        with open('./sample-videos/hashes.json') as f:
+            hash_to_filename = json.load(f)
 
-    video_path = f"./sample-videos/{hash_to_filename[hash_value]}.mp4"
+        video_path = f"./sample-videos/{hash_to_filename[hash_value]}.mp4"
+
     
     chunk_size = 8 * 1024 * 1024  # 8MB chunks
 
