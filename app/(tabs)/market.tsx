@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, ActivityIndicator, Alert} from 'react-native';
+import {View, ActivityIndicator, Alert, StyleSheet, TouchableOpacity} from 'react-native';
 import {
   Card,
   Searchbar,
@@ -121,7 +121,9 @@ const Market = () => {
           color="#6200ee"
           style={{height: 20, borderRadius: 10, width: '100%'}}
         />
-        <Text style={{marginTop: 5, alignItems: 'center'}}>{progressPercentage}%</Text>
+        <Text style={{marginTop: 5, alignItems: 'center'}}>
+          {progressPercentage}%
+        </Text>
       </View>
     );
   };
@@ -158,15 +160,25 @@ const Market = () => {
                 {showDownload ? (
                   downloadBar(fileDetails.size)
                 ) : (
-                  <Button onPress={() => buyFile(fileDetails)}>Buy File</Button>
+                  <TouchableOpacity
+                    onPress={() => buyFile(fileDetails)}
+                    style={styles.BuyButton}
+                  >
+                    <Text style={styles.BuyButtonText}>Buy File</Text>
+                  </TouchableOpacity>
                 )}
               </View>
             </Card.Content>
           ) : null}
           <Card.Actions>
-            <Button onPress={() => toggleDetails()}>
-              {showDetails ? 'Hide Details' : 'View Details'}
-            </Button>
+            <TouchableOpacity
+              onPress={() => toggleDetails()}
+              style={styles.DetailsButton}
+            >
+              <Text style={styles.DetailsButtonText}>
+                {showDetails ? 'Hide Details' : 'View Details'}
+              </Text>
+            </TouchableOpacity>
           </Card.Actions>
         </Card>
       ) : null}
@@ -195,5 +207,42 @@ const Market = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  BuyButton: {
+    marginTop: 15,
+    backgroundColor: '#4CAF50',
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  BuyButtonText: {
+    color: '#FFF', // White text color
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  DetailsButton: {
+    backgroundColor: '#007bff',
+    padding: 10,
+    borderRadius: 15,
+    marginTop: 10,
+    alignItems: 'center',
+  },
+  DetailsButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+});
 
 export default Market;
