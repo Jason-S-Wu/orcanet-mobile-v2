@@ -154,7 +154,7 @@ export const mockTransaction = [
 ];
 
 export const mockMarketData1 = {
-  fileHash: 'demo1',
+  fileHash: 'demo4b8f30d75fb91089344d5797f851c8c43e0d3ad7a6e8587bc8e4bb47b291',
   name: 'Minions 6',
   size: 3000,
   id: '1',
@@ -164,7 +164,7 @@ export const mockMarketData1 = {
 };
 
 export const mockMarketData2 = {
-  fileHash: 'demo2',
+  fileHash: 'demo71ba608aeac3f8a7ab17f23605341891c01a979f124acc960dc3dcc86096',
   name: 'Minions 7',
   size: 2000,
   id: '2',
