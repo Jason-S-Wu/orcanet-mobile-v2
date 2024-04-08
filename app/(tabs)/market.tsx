@@ -108,17 +108,19 @@ const Market = () => {
   }, [showDownload]);
 
   const downloadBar = (fileSize: number) => {
-    const progressPercentage = Math.min(
-      (downloadProgress / fileSize) * 100,
-      100
-    ).toFixed(2);
-
+    const progressPercentage = Number(
+      Math.min((downloadProgress / fileSize) * 100, 100).toFixed(2)
+    );
+    const blueComponent = Math.round((progressPercentage * 128) / 100);
+    const progressBarColor = `rgb(0, ${255 - blueComponent * 2}, ${
+      255 - blueComponent
+    })`;
     return (
       <View style={{marginTop: 10}}>
         <ProgressBar
-          progress={Number(progressPercentage) / 100}
-          color="#6200ee"
-          style={{height: 20, borderRadius: 10, width: '100%'}}
+          progress={progressPercentage / 100}
+          color={progressBarColor}
+          style={{height: 20, borderRadius: 15, width: '100%'}}
         />
         <Text style={{marginTop: 5, alignItems: 'center'}}>
           {progressPercentage}%
@@ -151,12 +153,33 @@ const Market = () => {
           {showDetails ? (
             <Card.Content>
               <View>
-                <Text>File Hash: {fileDetails.fileHash}</Text>
-                <Text>User ID: {fileDetails.id}</Text>
-                <Text>IP: {fileDetails.ip}</Text>
-                <Text>PORT: {fileDetails.port}</Text>
-                <Text>Cost Per MB: {fileDetails.price}</Text>
-                <Text>Size: {fileDetails.size} MB</Text>
+                <View style={styles.container}>
+                  <View style={styles.row}>
+                    <Text style={styles.label}>File Hash:</Text>
+                    <Text style={styles.value}>{fileDetails.fileHash}</Text>
+                  </View>
+                  <View style={styles.row}>
+                    <Text style={styles.label}>Cost Per MB:</Text>
+                    <Text style={styles.value}>{fileDetails.price}</Text>
+                  </View>
+                  <View style={styles.row}>
+                    <Text style={styles.label}>Size:</Text>
+                    <Text style={styles.value}>{fileDetails.size} MB</Text>
+                  </View>
+                  <View style={styles.row}>
+                    <Text style={styles.label}>User ID:</Text>
+                    <Text style={styles.value}>{fileDetails.id}</Text>
+                  </View>
+                  <View style={styles.row}>
+                    <Text style={styles.label}>IP:</Text>
+                    <Text style={styles.value}>{fileDetails.ip}</Text>
+                  </View>
+                  <View style={styles.row}>
+                    <Text style={styles.label}>Port:</Text>
+                    <Text style={styles.value}>{fileDetails.port}</Text>
+                  </View>
+                </View>
+
                 {showDownload ? (
                   downloadBar(fileDetails.size)
                 ) : (
@@ -210,10 +233,10 @@ const Market = () => {
 
 const styles = StyleSheet.create({
   cardContainer: {
-    marginTop: 0, 
-    margin: 20, 
+    marginTop: 0,
+    margin: 20,
     padding: 10,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#E0E0E0',
     borderRadius: 8,
     shadowColor: '#000000',
     shadowOpacity: 0.2,
@@ -222,6 +245,28 @@ const styles = StyleSheet.create({
       height: 2,
     },
     elevation: 2,
+  },
+  container: {
+    backgroundColor: '#616161',
+    padding: 20,
+    borderRadius: 10,
+    marginHorizontal: 10,
+    marginVertical: 5,
+    elevation: 5,
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  label: {
+    color: '#64FFDA',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  value: {
+    color: '#FFFFFF',
+    fontSize: 16,
   },
   buyButton: {
     marginTop: 15,
@@ -241,7 +286,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   buyButtonText: {
-    color: '#FFF', // White text color
+    color: '#FFF',
     fontSize: 18,
     fontWeight: 'bold',
   },
