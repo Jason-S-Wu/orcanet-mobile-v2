@@ -105,7 +105,10 @@ const Index = () => {
             <Button onPress={() => handleDeleteFile(item)}>
               <FontAwesome5 name="trash" size={20} color="#FF0000" />
             </Button>
-            <Button onPress={() => handleViewPress(item.name)}>
+            <Button
+              onPress={() => handleViewPress(item.name)}
+              style={styles.viewButton}
+            >
               <Text>View</Text>
             </Button>
           </Card.Actions>
@@ -169,7 +172,6 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 14,
   },
-
   item: {
     flexDirection: 'row',
     marginBottom: 5,
@@ -183,6 +185,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 20,
     padding: 10,
+  },
+  viewButton: {
+    backgroundColor: '#ADD8E6',
   },
 });
 
