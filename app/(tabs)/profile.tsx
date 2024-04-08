@@ -1,4 +1,4 @@
-import {View} from 'react-native';
+import {FlatList, ScrollView, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import {useRouter} from 'expo-router';
 import {Button, Divider, Text} from 'react-native-paper';
@@ -13,6 +13,24 @@ const Profile = () => {
   const router = useRouter();
   const route = useRoute();
   const {user} = route.params as {user: MobileUser};
+
+  const renderItem = ({item, index}: any) => {
+    const borderColor = item.status === 'success' ? '#4CAF50' : '#F44336';
+
+    return (
+      <View style={[styles.transactionItem, {borderColor}]}>
+        <View style={styles.infoContainer}>
+          <Text style={styles.statusText}>TransactionID: {item.id}</Text>
+          <Text style={styles.statusText}>Status: {item.status}</Text>
+          <Text style={styles.dateText}>Date: {item.date}</Text>
+        </View>
+        <View style={styles.amountContainer}>
+          <Text>Price: {item.amount}</Text>
+          <Text style={styles.noteText}>Note: {item.note}</Text>
+        </View>
+      </View>
+    );
+  };
 
   return (
     <View>
@@ -40,6 +58,13 @@ const Profile = () => {
       >
         Transactions
       </Text>
+      <ScrollView style={{flex: 1}}>
+        <FlatList
+          data={user.transactions}
+          keyExtractor={item => item.id}
+          renderItem={renderItem}
+        />
+      </ScrollView>
       <Divider />
       <Text style={{marginLeft: 20, fontSize: 20, fontWeight: 'bold'}}>
         Statistics
@@ -105,6 +130,42 @@ const Profile = () => {
       </Button>
     </View>
   );
+};
+
+const styles = {
+  transactionItem: {
+    padding: 20,
+    borderWidth: 1,
+    borderRadius: 10,
+    marginHorizontal: 10,
+    marginVertical: 5,
+    backgroundColor: '#f9f9f9',
+    // Add depth with box shadow
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  infoContainer: {
+    flex: 1,
+  },
+  amountContainer: {},
+  statusText: {
+    fontSize: 16,
+    marginBottom: 5,
+  },
+  dateText: {
+    fontSize: 14,
+    color: '#888',
+  },
+  priceText: {
+    fontWeight: 'bold',
+  },
+  noteText: {
+    fontSize: 14,
+    color: '#888',
+  },
 };
 
 export default Profile;
