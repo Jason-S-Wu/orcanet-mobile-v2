@@ -9,6 +9,7 @@ import {
 import React, {useRef, useState} from 'react';
 import {router} from 'expo-router';
 import {Button, Card, Text, Searchbar} from 'react-native-paper';
+import {FontAwesome5} from '@expo/vector-icons';
 import {mockFileData} from '@/constants/mock-data/mockData';
 import {MarketFile} from '@/constants/types';
 import {fetchFromServer} from '@/constants/mock-data/mockServerRequest';
@@ -16,12 +17,16 @@ import {fetchFromServer} from '@/constants/mock-data/mockServerRequest';
 const Index = () => {
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [myFiles, setMyFiles] = useState<MarketFile[]>(mockFileData);
 
-  const mockFiles: MarketFile[] = mockFileData; //for mock data currently
-
-  const files = mockFiles.filter(file =>
+  const files = myFiles.filter(file =>
     file.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const handleDeleteFile = (file: MarketFile) => {
+    const updatedFiles = myFiles.filter(f => f.fileHash !== file.fileHash);
+    setMyFiles(updatedFiles);
+  };
 
   const handleViewPress = async (fileName: string) => {
     setLoading(true);
@@ -50,7 +55,7 @@ const Index = () => {
     });
   };
 
-  if (mockFiles.length === 0) {
+  if (myFiles.length === 0) {
     return (
       <Card style={styles.card}>
         <Card.Content>
@@ -97,6 +102,9 @@ const Index = () => {
             <Text style={styles.text}>{`Hash: ${item.fileHash}`}</Text>
           </Card.Content>
           <Card.Actions>
+            <Button onPress={() => handleDeleteFile(item)}>
+              <FontAwesome5 name="trash" size={20} color="#FF0000" />
+            </Button>
             <Button onPress={() => handleViewPress(item.name)}>
               <Text>View</Text>
             </Button>
