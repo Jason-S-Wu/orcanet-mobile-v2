@@ -5,6 +5,8 @@ import {
   StyleSheet,
   SafeAreaView,
   Animated,
+  FlatList,
+  Platform
 } from 'react-native';
 import React, {useRef, useState} from 'react';
 import {router} from 'expo-router';
@@ -135,18 +137,27 @@ const Index = () => {
           </Card.Actions>
         </Card>
       ) : (
-        <SafeAreaView>
-          <Animated.FlatList
+        (Platform.OS === 'web') ? (
+          <FlatList
             data={files}
             keyExtractor={item => item.fileHash}
             renderItem={renderItem}
-            onScroll={Animated.event(
-              [{nativeEvent: {contentOffset: {y: scrollY}}}],
-              {useNativeDriver: true}
-            )}
             contentContainerStyle={{paddingBottom: 100}}
           />
-        </SafeAreaView>
+        ) : (
+          <SafeAreaView>
+            <Animated.FlatList
+              data={files}
+              keyExtractor={item => item.fileHash}
+              renderItem={renderItem}
+              onScroll={Animated.event(
+                [{nativeEvent: {contentOffset: {y: scrollY}}}],
+                {useNativeDriver: true}
+              )}
+              contentContainerStyle={{paddingBottom: 100}}
+            />
+          </SafeAreaView>
+        )
       )}
     </View>
   );
