@@ -14,6 +14,7 @@ import {mockFileData} from '@/constants/mock-data/mockData';
 import {MarketFile, MobileUser} from '@/constants/types';
 import {fetchFromServer} from '@/constants/mock-data/mockServerRequest';
 import {useRoute} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Index = () => {
   const route = useRoute();
@@ -22,6 +23,15 @@ const Index = () => {
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [myFiles, setMyFiles] = useState<MarketFile[]>(mockFileData);
+
+  const storeData = async (value: MarketFile[]) => {
+    try {
+      const jsonValue = JSON.stringify(value);
+      await AsyncStorage.setItem('myFiles', jsonValue);
+    } catch (e) {
+      console.log('Failed to store data');
+    }
+  };
 
   const files = myFiles.filter(file =>
     file.name.toLowerCase().includes(searchQuery.toLowerCase())
