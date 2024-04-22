@@ -1,5 +1,5 @@
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
-import React, { useState }  from 'react';
+import React, {useState}  from 'react';
 
 const Settings = () => {
   const [generatedKey, setGeneratedKey] = useState<string|null>(null);
