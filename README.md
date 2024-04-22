@@ -47,3 +47,12 @@ Before you begin, ensure you have met the following requirements:
     ```bash
     npx expo start --tunnel
     ```
+
+### Index Page
+The index page lists files that have been downloaded. Each file is in a card block that indicates its size and associated hash. Each card block also has a delete and view option. Clicking into the view option results in a viewer tab, allowing the user to view the file in the device's native viewer. 
+
+### Market Page
+The Market page lists files that are available in the market. There is a search bar to look up a desired file. The files have a view details button that shows more information such as the file hash, cost per MB, size, User ID, IP, and Port. The option to Buy File is also present to purchase the file and have it downloaded into local storage. 
+
+### Profile Page
+The Profile page is split into four sections: Account, Statistics, Transactions, and Settings. The Account section shows the User ID and current balance of coins. The statistics shows a monthly data usage in MB. The transactions shows a list of transactions, with each transaction indicating the Transaction ID, status, date, price, and note indicating the file name. The settings tab has an option to generate a public and private key using SHA 256.  
